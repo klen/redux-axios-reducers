@@ -1,0 +1,29 @@
+{
+  "name": "redux-axios-reducers",
+  "version": "0.0.0",
+  "description": "Redux redurces for Axios",
+  "main": "lib/redux-axios-reducers.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klen/redux-axios-reducers.git"
+  },
+  "keywords": [
+    "axios",
+    "redux"
+  ],
+  "author": "Kirill Klenov <horneds@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klen/redux-axios-reducers/issues"
+  },
+  "homepage": "https://github.com/klen/redux-axios-reducers#readme",
+  "dependencies": {
+    "redux": "^3.7.2"
+  },
+  "devDependencies": {
+    "coffeescript": "^1.12.7"
+  }
+}
