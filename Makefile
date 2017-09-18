@@ -11,3 +11,7 @@ release:
 	make build
 	bumpversion patch
 	make publish
+	git checkout master
+	git merge develop
+	git checkout develop
+	git push origin develop master
