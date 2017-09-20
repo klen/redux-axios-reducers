@@ -128,6 +128,7 @@ class AxiosRESTReducer extends AxiosReducer
       state.data.push(item.id) unless action.config.id
 
     if action.config.method == 'delete' and action.config.id
+      delete state.byId[action.config.id]
       state.data = (id for id in state.data when id != action.config.id)
 
     return fetching: false, error: null
