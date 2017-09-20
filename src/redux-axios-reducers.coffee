@@ -51,7 +51,10 @@ class AxiosReducer
 
   reduceFetching: -> fetching: true
 
-  reduceSuccess: (state, action) -> data: action.response.data, fetching: false
+  reduceSuccess: (state, action) ->
+    data: action.response.data
+    fetching: false
+    error: null
 
   reduceError: (state, action) -> error: action.error, fetching: false
 
@@ -127,7 +130,7 @@ class AxiosRESTReducer extends AxiosReducer
     if action.config.method == 'delete' and action.config.id
       state.data = (id for id in state.data when id != action.config.id)
 
-    return fetching: false
+    return fetching: false, error: null
 
   transformConfig: (config) ->
     config = super(config)
