@@ -58,7 +58,9 @@ class AxiosReducer
 
   reduceError: (state, action) -> error: action.error, fetching: false
 
-  fetch: (config={}) -> (dispatch) =>
+  fetch: (config={}) => (dispatch) =>
+
+    throw "Please configure the reducer '#{@config.name}' before first use." unless @axios and @axios.request
 
     config = @transformConfig(config)
 
@@ -82,7 +84,7 @@ class AxiosReducer
 
         return error
 
-  get: @fetch
+  get: (config) => @fetch(config)
 
   post: (config={}) =>
     config = assign {}, data: config unless config.data
@@ -94,12 +96,15 @@ class AxiosReducer
     config = assign {method: 'put', id: config.data.id}, config
     @fetch(config)
 
-  patch: @put
+  patch: (config) =>
+    config = assign {}, data: config unless config.data
+    config = assign {method: 'patch', id: config.data.id}, config
+    @fetch(config)
 
   remove: (config={}) =>
     @fetch(assign {method: 'delete'}, config)
 
-  update: (config) ->
+  update: (config) =>
     return @put(config) if config.data and config.data.id or config.id
     return @post(config)
 
