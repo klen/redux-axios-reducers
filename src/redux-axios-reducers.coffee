@@ -1,4 +1,4 @@
-export default class AxiosReducer
+export class AxiosReducer
 
   default:
     data: null
@@ -154,3 +154,5 @@ export class AxiosRESTReducer extends AxiosReducer
     state = @getState()
     return [] unless state.data
     return (state.byId[id] for id in state.data)
+
+export default AxiosReducer
