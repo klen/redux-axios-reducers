@@ -126,7 +126,8 @@ class AxiosRESTReducer extends AxiosReducer
     @default.data = []
 
   reduceSuccess: (state, action) ->
-    singleId = action.config.id or action.data.id
+    singleId = action.config.id or (
+      action.config.data and action.config.data.id)
 
     state.data = [] if action.config.method == 'get' and not singleId
     data = action.response.data
