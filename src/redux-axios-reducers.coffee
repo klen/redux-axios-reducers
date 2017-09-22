@@ -1,4 +1,4 @@
-export class AxiosReducer
+class AxiosReducer
 
   default:
     data: null
@@ -117,7 +117,7 @@ export class AxiosReducer
   transformData: (data) -> data
 
 
-export class AxiosRESTReducer extends AxiosReducer
+class AxiosRESTReducer extends AxiosReducer
 
   constructor: (config) ->
     super(config)
@@ -155,4 +155,4 @@ export class AxiosRESTReducer extends AxiosReducer
     return [] unless state.data
     return (state.byId[id] for id in state.data)
 
-export default AxiosReducer
+module.exports = { AxiosReducer, AxiosRESTReducer }
