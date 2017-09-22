@@ -144,7 +144,8 @@ export class AxiosRESTReducer extends AxiosReducer
   transformConfig: (config) ->
     config = super(config)
     id = (
-      (config.data and config.data.id) or (config.params and config.params.id))
+      config.id or (config.data and config.data.id) or
+      (config.params and config.params.id))
     config.url += "/#{id}" if id
     return config
 
