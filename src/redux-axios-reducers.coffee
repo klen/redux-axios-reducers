@@ -1,11 +1,4 @@
-assign = (target, objs...) ->
-  for obj in objs
-    continue unless obj?
-    target[k] = obj[k] for k of obj
-  return target
-
-
-class AxiosReducer
+export default class AxiosReducer
 
   default:
     data: null
@@ -16,7 +9,7 @@ class AxiosReducer
   constructor: (@config={}) ->
     @config.name ?= 'noname'
     @config.baseURL ?= "/#{@name}"
-    @default = assign {}, @default
+    @default = {@default...}
 
     name = @config.name.toUpperCase()
     @TYPES = {
@@ -30,37 +23,43 @@ class AxiosReducer
 
     selfState = null
 
-    @getState = -> assign({}, selfState)
+    @getState = -> {selfState...}
 
-    @config = assign(@config, config) if config
+    @config = {@config..., config...} if config
 
     # Create Reducer
     return (state=@default, action) =>
       return selfState = switch action.type
 
         when @TYPES.FETCHING
-          assign {}, state, @reduceFetching(state, action)
+          {state..., @reduceFetching(state, action)...}
 
         when @TYPES.FETCH_SUCCESS
-          assign {}, state, @reduceSuccess(state, action)
+          {state..., @reduceSuccess(state, action)...}
 
         when @TYPES.FETCH_ERROR
-          assign {}, state, @reduceError(state, action)
+          {state..., @reduceError(state, action)...}
 
         else state
 
   reduceFetching: -> fetching: true
 
   reduceSuccess: (state, action) ->
-    data: action.response.data
-    fetching: false
-    error: null
+    return
+      data: action.response.data
+      fetching: false
+      error: null
 
-  reduceError: (state, action) -> error: action.error, fetching: false
+  reduceError: (state, action) ->
+    return
+      error: action.error
+      fetching: false
 
   fetch: (config={}) => (dispatch) =>
 
-    throw "Please configure the reducer '#{@config.name}' before first use." unless @axios and @axios.request
+    unless @axios and @axios.request
+      throw new Error(
+        "Please configure the reducer '#{@config.name}' before first use.")
 
     config = @transformConfig(config)
 
@@ -84,37 +83,42 @@ class AxiosReducer
 
         return error
 
-  get: (config) => @fetch(config)
+  get: (config) =>
+    return @fetch(config)
 
   post: (config={}) =>
-    config = assign {}, data: config unless config.data
-    config = assign {method: 'post'}, config
-    @fetch(config)
+    config = {data: config} unless config.data
+    config = {config..., method: config.method or 'post'}
+    return @fetch(config)
 
   put: (config={}) =>
-    config = assign {}, data: config unless config.data
-    config = assign {method: 'put', id: config.data.id}, config
-    @fetch(config)
+    config = {data: config} unless config.data
+    config = {config..., method: config.method or 'put', id: config.data.id}
+    return @fetch(config)
 
   patch: (config) =>
-    config = assign {}, data: config unless config.data
-    config = assign {method: 'patch', id: config.data.id}, config
-    @fetch(config)
+    config = {data: config} unless config.data
+    config = {config..., method: config.method or 'patch', id: config.data.id}
+    return @fetch(config)
 
   remove: (config={}) =>
-    @fetch(assign {method: 'delete'}, config)
+    config = {config..., method: config.method or 'delete'}
+    return @fetch(config)
 
   update: (config) =>
     return @put(config) if config.data and config.data.id or config.id
     return @post(config)
 
   transformConfig: (config) ->
-    assign {method: 'get', url: @config.baseURL}, config
+    return {
+      config...,
+      method: config.method or 'get'
+      url: config.url or @config.baseURL}
 
   transformData: (data) -> data
 
 
-class AxiosRESTReducer extends AxiosReducer
+export class AxiosRESTReducer extends AxiosReducer
 
   constructor: (config) ->
     super(config)
@@ -148,7 +152,3 @@ class AxiosRESTReducer extends AxiosReducer
     state = @getState()
     return [] unless state.data
     return (state.byId[id] for id in state.data)
-
-module.exports =
-    AxiosReducer: AxiosReducer
-    AxiosRESTReducer: AxiosRESTReducer
