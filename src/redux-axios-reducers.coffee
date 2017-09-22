@@ -1,8 +1,3 @@
-processConfig = (method='get', data=false) -> (func) -> (config) ->
-  config = {data: config} unless not data or config.data
-  config = {config..., method: config.method or method}
-  return func(config)
-
 export default class AxiosReducer
 
   default:
@@ -92,13 +87,26 @@ export default class AxiosReducer
     return @put(config) if config.data and config.data.id
     return @post(config)
 
-  get: processConfig() @fetch
+  get: (config) => @fetch(config)
 
-  post: processConfig('post', true) @fetch
+  post: (config={}) =>
+    config = {data: config} unless config.data
+    config = {config..., method: config.method or 'post'}
+    @fetch(config)
 
-  put: processConfig('put', true) @fetch
+  put: (config={}) =>
+    config = {data: config} unless config.data
+    config = {config..., method: config.method or 'put'}
+    @fetch(config)
 
-  remove: processConfig('delete') @fetch
+  patch: (config={}) =>
+    config = {data: config} unless config.data
+    config = {config..., method: config.method or 'patch'}
+    @fetch(config)
+
+  remove: (config={}) =>
+    config = {config..., method: config.method or 'delete'}
+    @fetch(config)
 
   transformConfig: (config) ->
     return {
