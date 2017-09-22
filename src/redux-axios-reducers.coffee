@@ -1,3 +1,8 @@
+processConfig = (method='get', data=false) -> (func) -> (config) ->
+  config = {data: config} unless not data or config.data
+  config = {config..., method: config.method or method}
+  return func(config)
+
 export default class AxiosReducer
 
   default:
@@ -83,31 +88,17 @@ export default class AxiosReducer
 
         return error
 
-  get: (config) =>
-    return @fetch(config)
-
-  post: (config={}) =>
-    config = {data: config} unless config.data
-    config = {config..., method: config.method or 'post'}
-    return @fetch(config)
-
-  put: (config={}) =>
-    config = {data: config} unless config.data
-    config = {config..., method: config.method or 'put', id: config.data.id}
-    return @fetch(config)
-
-  patch: (config) =>
-    config = {data: config} unless config.data
-    config = {config..., method: config.method or 'patch', id: config.data.id}
-    return @fetch(config)
-
-  remove: (config={}) =>
-    config = {config..., method: config.method or 'delete'}
-    return @fetch(config)
-
   update: (config) =>
-    return @put(config) if config.data and config.data.id or config.id
+    return @put(config) if config.data and config.data.id
     return @post(config)
+
+  get: processConfig() @fetch
+
+  post: processConfig('post', true) @fetch
+
+  put: processConfig('put', true) @fetch
+
+  remove: processConfig('delete') @fetch
 
   transformConfig: (config) ->
     return {
@@ -144,7 +135,9 @@ export class AxiosRESTReducer extends AxiosReducer
 
   transformConfig: (config) ->
     config = super(config)
-    config.url += "/#{config.id}" if config.id
+    id = (
+      (config.data and config.data.id) or (config.params and config.params.id))
+    config.url += "/#{id}" if id
     return config
 
   # Iterate through loaded data
