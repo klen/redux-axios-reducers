@@ -84,7 +84,7 @@ class AxiosReducer
         return error
 
   update: (config) =>
-    return @put(config) if config.data and config.data.id
+    return @put(config) if config.data and config.data.id or config.id
     return @post(config)
 
   get: (config) => @fetch(config)
