@@ -126,18 +126,20 @@ class AxiosRESTReducer extends AxiosReducer
     @default.data = []
 
   reduceSuccess: (state, action) ->
-    state.data = [] if action.config.method == 'get' and not action.config.id
+    singleId = action.config.id or action.data.id
+
+    state.data = [] if action.config.method == 'get' and not singleId
     data = action.response.data
     data = [data] unless Array.isArray(data)
 
     for item in data
       continue unless item and item.id
       state.byId[item.id] = item
-      state.data.push(item.id) unless action.config.id
+      state.data.push(item.id) unless singleId
 
-    if action.config.method == 'delete' and action.config.id
-      delete state.byId[action.config.id]
-      state.data = (id for id in state.data when id != action.config.id)
+    if action.config.method == 'delete' and singleId
+      delete state.byId[singleId]
+      state.data = (id for id in state.data when id != singleId)
 
     return fetching: false, error: null
 
