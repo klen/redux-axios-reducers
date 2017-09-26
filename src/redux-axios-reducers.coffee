@@ -8,7 +8,7 @@ class AxiosReducer
   # Construct types and configuration
   constructor: (@config={}) ->
     @config.name ?= 'noname'
-    @config.baseURL ?= "/#{@name}"
+    @config.baseURL ?= "/#{@config.name}"
     @default = {@default...}
 
     name = @config.name.toUpperCase()
