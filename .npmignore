@@ -1,4 +1,6 @@
-/src
 /Makefile
 /node_modules
 /package-lock.json
+/src
+/tests
+/todo.txt
