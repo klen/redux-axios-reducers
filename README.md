@@ -76,12 +76,12 @@ A reducer is generating TYPES based on given name:
 ```js
 
     reducerInstance.TYPES
-    {
-        FETCHING: `ASYNC/${name.toUpperCase()}/FETCHING`
-        FETCH_ERROR: `ASYNC/${name.toUpperCase()}/FETCH_ERROR`
-        FETCH_SUCCESS: `ASYNC/${name.toUpperCase()}/SUCCESS`
-        
-    }
+    // {
+    //     FETCHING: `ASYNC/${name.toUpperCase()}/FETCHING`
+    //     FETCH_ERROR: `ASYNC/${name.toUpperCase()}/FETCH_ERROR`
+    //     FETCH_SUCCESS: `ASYNC/${name.toUpperCase()}/SUCCESS`
+    //     
+    // }
 ```
 
 So you can use it in your own reducers like `usersReducer.TYPES.FETCH_SUCCESS`
