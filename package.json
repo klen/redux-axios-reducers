@@ -20,7 +20,7 @@
     "redux"
   ],
   "author": "Kirill Klenov <horneds@gmail.com>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/klen/redux-axios-reducers/issues"
   },
