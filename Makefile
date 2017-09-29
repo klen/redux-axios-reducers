@@ -7,9 +7,10 @@ build: $(CURDIR)/node_modules
 publish:
 	npm publish
 
+RELEASE ?= patch
 release:
 	make build
-	bumpversion patch
+	bumpversion $(RELEASE)
 	make publish
 	git checkout master
 	git merge develop
