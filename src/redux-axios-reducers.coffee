@@ -14,7 +14,7 @@ class AxiosReducer
     name = @config.name.toUpperCase()
     @TYPES = {
       FETCHING: "ASYNC/#{name}/FETCHING"
-      FETCH_ERROR: "ASYNC/#{name}/FETCH_ERROR"
+      FETCH_FAIL: "ASYNC/#{name}/FETCH_FAIL"
       FETCH_SUCCESS: "ASYNC/#{name}/FETCH_SUCCESS"
     }
 

@@ -10,6 +10,10 @@ Redux reducers for fetching data with axios HTTP client
 npm install --save redux-axios-reducers
 ```
 
+### Dependencies
+
+`redux-axios-reducers` depends on `redux`, `redux-thunk`.
+
 ## How to use?
 
 ### Configure and connect an Axios reducer
@@ -38,17 +42,19 @@ const store = createStore(reducers)
 
 ### Dispatch actions
 
-A reducer instance has methods which generate actions and do HTTP requests.
+A reducer instance has methods which generate async (redux-thunk) actions. The
+actions do HTTP request.
 
 ```js
 
 // HTTP GET /api/users
 loadUsers = () => usersReducer.get()
 
+// HTTP GET /api/users?status=active
 loadUsersWithFilter = (status) => usersReducer.get({
     // See Axios documentation for params
     params: {
-        status: status
+        status: 'active'
     }
 })
 
@@ -67,6 +73,16 @@ loadUsers = () => (dispatch) => {
     })
 }
 
+// Redux-thunk middleware, chain methods
+loadUsersAndComments = () => (dispatch) => {
+    Promise.all([
+        usersReducer.get(),
+        commentsReducer.get()
+    ]).then( () => {
+        // do something else
+    })
+}
+
 ```
 
 ### Reduce actions
@@ -78,7 +94,7 @@ A reducer is generating TYPES based on given name:
     reducerInstance.TYPES
     // {
     //     FETCHING: `ASYNC/${name.toUpperCase()}/FETCHING`
-    //     FETCH_ERROR: `ASYNC/${name.toUpperCase()}/FETCH_ERROR`
+    //     FETCH_FAIL: `ASYNC/${name.toUpperCase()}/FETCH_FAIL`
     //     FETCH_SUCCESS: `ASYNC/${name.toUpperCase()}/SUCCESS`
     //     
     // }
@@ -86,3 +102,22 @@ A reducer is generating TYPES based on given name:
 
 So you can use it in your own reducers like `usersReducer.TYPES.FETCH_SUCCESS`
 
+### Reducers methods
+
+#### AxiosReducer/AxiosRestReducer
+
+method                  | description
+------------------------|------------------------
+get/fetch               | HTTP GET accepts AxiosParams
+post                    | HTTP POST accepts AxiosParams
+put                     | HTTP PUT accepts AxiosParams
+patch                   | HTTP PATCH accepts AxiosParams
+remove                  | HTTP DELETE accepts AxiosParams
+
+## License
+
+This project is licensed under the MIT license, Copyright (c) 2017 Kirill Klenov. For more information see `LICENSE.md`.
+
+## Acknowledgements
+
+[Dan Abramov](https://github.com/gaearon) for Redux [Matt Zabriskie](https://github.com/mzabriskie) for [Axios](https://github.com/mzabriskie/axios). A Promise based HTTP client for the browser and node.js
