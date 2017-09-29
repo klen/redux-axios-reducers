@@ -66,9 +66,8 @@ updateUsers = (id, data) => usersReducer.put({
 
 // Redux-thunk middleware
 loadUsers = () => (dispatch) => {
-    dispatch(
-        usersReducer.get()
-    ).then( () => {
+    dispatch(usersReducer.get())
+    .then( () => {
         // do something else
     })
 }
@@ -76,9 +75,10 @@ loadUsers = () => (dispatch) => {
 // Redux-thunk middleware, chain methods
 loadUsersAndComments = () => (dispatch) => {
     Promise.all([
-        usersReducer.get(),
-        commentsReducer.get()
-    ]).then( () => {
+        dispatch(usersReducer.get()),
+        dispatch(commentsReducer.get())
+    ])
+    .then( () => {
         // do something else
     })
 }
