@@ -65,10 +65,11 @@ class AxiosReducer
 
     config = @transformConfig(config)
 
-    cancelTokenSource = Axios.CancelToken.source()
-    config = {config..., cancelToken: cancelTokenSource.token}
+    config = {config..., cancelToken: new Axios.CancelToken(
+      (c) -> promise.cancel = c
+    )}
 
-    dispatch type: @TYPES.FETCHING, config: config, cancel: cancelTokenSource
+    dispatch type: @TYPES.FETCHING, config: config
 
     promise = @axios.request config
       .then (response) =>
@@ -89,7 +90,6 @@ class AxiosReducer
 
         return error
 
-    promise.cancel = -> cancelTokenSource.cancel
     return promise
 
   update: (config) =>
