@@ -1,6 +1,6 @@
 {
   "name": "redux-axios-reducers",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Redux redurces for Axios",
   "main": "lib/redux-axios-reducers.js",
   "babel": {
