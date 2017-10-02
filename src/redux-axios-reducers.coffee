@@ -65,10 +65,10 @@ class AxiosReducer
 
     config = @transformConfig(config)
 
-    cancelToken = Axios.CancelToken.source()
-    config = {config..., cancelToken: cancelToken}
+    cancelTokenSource = Axios.CancelToken.source()
+    config = {config..., cancelToken: cancelTokenSource.token}
 
-    dispatch type: @TYPES.FETCHING, config: config
+    dispatch type: @TYPES.FETCHING, config: config, cancel: cancelTokenSource
 
     return @axios.request config
       .then (response) =>
