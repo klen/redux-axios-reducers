@@ -63,7 +63,11 @@ class AxiosReducer
 
     config = @transformConfig(config)
 
+    cancelToken = @axios.CancelToken.source()
+    config = {config..., cancelToken: cancelToken}
+
     dispatch type: @TYPES.FETCHING, config: config
+
     return @axios.request config
       .then (response) =>
         response.data = @transformData(response.data)
@@ -79,7 +83,7 @@ class AxiosReducer
         dispatch
           type: @TYPES.FETCH_FAIL
           config: config
-          error: error
+          error: if @axios.isCancel error then null else error
 
         return error
 
