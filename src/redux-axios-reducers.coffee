@@ -77,7 +77,7 @@ class AxiosReducer
       .catch (error) =>
         console?.error(error)
         dispatch
-          type: @TYPES.FETCH_ERROR
+          type: @TYPES.FETCH_FAIL
           config: config
           error: error
 
