@@ -1,3 +1,5 @@
+Axios = require('axios')
+
 class AxiosReducer
 
   default:
@@ -63,7 +65,7 @@ class AxiosReducer
 
     config = @transformConfig(config)
 
-    cancelToken = @axios.CancelToken.source()
+    cancelToken = Axios.CancelToken.source()
     config = {config..., cancelToken: cancelToken}
 
     dispatch type: @TYPES.FETCHING, config: config
@@ -83,7 +85,7 @@ class AxiosReducer
         dispatch
           type: @TYPES.FETCH_FAIL
           config: config
-          error: if @axios.isCancel error then null else error
+          error: if Axios.isCancel(error) then null else error
 
         return error
 

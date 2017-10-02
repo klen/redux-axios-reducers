@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/klen/redux-axios-reducers#readme",
   "dependencies": {
+    "axios": "^0.16.2",
     "redux": "^3.7.2"
   },
   "devDependencies": {
