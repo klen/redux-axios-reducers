@@ -37,8 +37,8 @@ class AxiosReducer
         when @TYPES.FETCH_SUCCESS
           {state..., @reduceSuccess(state, action)...}
 
-        when @TYPES.FETCH_ERROR
-          {state..., @reduceError(state, action)...}
+        when @TYPES.FETCH_FAIL
+          {state..., @reduceFail(state, action)...}
 
         else state
 
@@ -50,7 +50,7 @@ class AxiosReducer
       fetching: false
       error: null
 
-  reduceError: (state, action) ->
+  reduceFail: (state, action) ->
     return
       error: action.error
       fetching: false
