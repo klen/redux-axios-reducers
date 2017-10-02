@@ -70,7 +70,7 @@ class AxiosReducer
 
     dispatch type: @TYPES.FETCHING, config: config, cancel: cancelTokenSource
 
-    return @axios.request config
+    promise = @axios.request config
       .then (response) =>
         response.data = @transformData(response.data)
         dispatch
@@ -88,6 +88,9 @@ class AxiosReducer
           error: if Axios.isCancel(error) then null else error
 
         return error
+
+    promise.cancel = -> cancelTokenSource.cancel
+    return promise
 
   update: (config) =>
     return @put(config) if config.data and config.data.id or config.id
