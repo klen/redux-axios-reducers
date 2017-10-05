@@ -7,31 +7,34 @@ class AxiosReducer
     error: null
     fetching: null
 
-  # Construct types and configuration
-  constructor: (@config={}) ->
-    @config.name ?= 'noname'
-    @config.baseURL ?= "/#{@config.name}"
+  # Construct types and defaults
+  constructor: (@defaults={}) ->
+
     @default = {@default...}
 
-    name = @config.name.toUpperCase()
+    @defaults.axios   ?= Axios
+    @defaults.baseURL ?= "/#{@defaults.name}"
+    @defaults.name    ?= 'noname'
+
+    name = @defaults.name.toUpperCase()
     @TYPES = {
       FETCHING: "ASYNC/#{name}/FETCHING"
       FETCH_FAIL: "ASYNC/#{name}/FETCH_FAIL"
       FETCH_SUCCESS: "ASYNC/#{name}/FETCH_SUCCESS"
     }
 
-    # Init reducer
-  configure: (@axios, config) ->
+  # Init reducer
+  configure: (defaults) ->
 
-    selfState = null
+    state_ = null
 
-    @getState = -> {selfState...}
+    @getState = -> {state_...}
 
-    @config = {@config..., config...} if config
+    @defaults = {@defaults..., defaults...} if defaults
 
     # Create Reducer
     return (state=@default, action) =>
-      return selfState = switch action.type
+      return state_ = switch action.type
 
         when @TYPES.FETCHING
           {state..., @reduceFetching(state, action)...}
@@ -44,7 +47,10 @@ class AxiosReducer
 
         else state
 
-  reduceFetching: -> fetching: true
+  # Reducers
+  reduceFetching: ->
+    return
+      fetching: true
 
   reduceSuccess: (state, action) ->
     return
@@ -57,14 +63,16 @@ class AxiosReducer
       error: action.error
       fetching: false
 
+  # Make a request with axios (global or configured instance)
   request: (config) =>
 
-    unless @axios and @axios.request
+    unless @defaults.axios and @defaults.axios.request
       throw new Error(
-        "Please configure the reducer '#{@config.name}' before first use.")
+        "Please configure the reducer '#{@defaults.name}' before first use.")
 
-    return @axios.request(config)
+    return @defaults.axios.request(config)
 
+  # Process request
   fetch: (config={}) => (dispatch) =>
 
     config = @transformConfig(config)
@@ -81,23 +89,31 @@ class AxiosReducer
       .then (response) =>
         response.data = @transformData(response.data)
         dispatch
-          type: @TYPES.FETCH_SUCCESS
           config: config
           response: response
+          type: @TYPES.FETCH_SUCCESS
 
         return response
 
       .catch (error) =>
         console?.error(error)
         dispatch
-          type: @TYPES.FETCH_FAIL
           config: config
           error: if Axios.isCancel(error) then null else error
+          type: @TYPES.FETCH_FAIL
 
         return error
 
     promise.cancel = cancel
     return promise
+
+  transformConfig: (config) ->
+    return {
+      config...,
+      method: config.method or 'get'
+      url: config.url or @defaults.baseURL}
+
+  transformData: (data) -> data
 
   update: (config) =>
     return @put(config) if config.data and config.data.id or config.id
@@ -124,22 +140,14 @@ class AxiosReducer
     config = {config..., method: config.method or 'delete'}
     @fetch(config)
 
-  transformConfig: (config) ->
-    return {
-      config...,
-      method: config.method or 'get'
-      url: config.url or @config.baseURL}
-
-  transformData: (data) -> data
-
 
 class AxiosRESTReducer extends AxiosReducer
 
-  constructor: (config) ->
-    super(config)
-
-    @default.byId = {}
-    @default.data = []
+  default:
+    data: []
+    byId: {}
+    error: null
+    fetching: null
 
   reduceSuccess: (state, action) ->
     singleId = action.config.id or (

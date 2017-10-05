@@ -31,7 +31,7 @@ const client = axios.create({
 });
 
 const reducers = combineReducers({
-    users: usersReducer.configure(client);
+    users: usersReducer.configure({axios: client});
     // application reducers
     ...
 });
