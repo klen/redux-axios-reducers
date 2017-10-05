@@ -57,11 +57,15 @@ class AxiosReducer
       error: action.error
       fetching: false
 
-  fetch: (config={}) => (dispatch) =>
+  request: (config) =>
 
     unless @axios and @axios.request
       throw new Error(
         "Please configure the reducer '#{@config.name}' before first use.")
+
+    return @axios.request(config)
+
+  fetch: (config={}) => (dispatch) =>
 
     config = @transformConfig(config)
 
@@ -72,7 +76,7 @@ class AxiosReducer
 
     dispatch type: @TYPES.FETCHING, config: config
 
-    promise = @axios.request config
+    promise = @request(config)
 
       .then (response) =>
         response.data = @transformData(response.data)
