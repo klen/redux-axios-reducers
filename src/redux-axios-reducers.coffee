@@ -143,11 +143,10 @@ class AxiosReducer
 
 class AxiosRESTReducer extends AxiosReducer
 
-  default:
-    data: []
-    byId: {}
-    error: null
-    fetching: null
+  constructor: (defaults) ->
+    super(defaults)
+    @defaults.byId = {}
+    @defaults.data = []
 
   reduceSuccess: (state, action) ->
     singleId = action.config.id or (
