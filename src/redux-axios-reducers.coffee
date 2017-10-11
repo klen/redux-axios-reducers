@@ -36,32 +36,32 @@ class AxiosReducer
     return (state=@default, action) =>
       return state_ = switch action.type
 
-        when @TYPES.FETCHING
-          {state..., @reduceFetching(state, action)...}
+        when @TYPES.FETCHING then @reduceFetching(state, action)
 
-        when @TYPES.FETCH_SUCCESS
-          {state..., @reduceSuccess(state, action)...}
+        when @TYPES.FETCH_SUCCESS then @reduceSuccess(state, action)
 
-        when @TYPES.FETCH_FAIL
-          {state..., @reduceFail(state, action)...}
+        when @TYPES.FETCH_FAIL then @reduceFail(state, action)
 
         else state
 
   # Reducers
-  reduceFetching: ->
-    return
-      fetching: true
+  reduceFetching: (state)->
+    return {state..., fetching: true}
 
   reduceSuccess: (state, action) ->
-    return
-      data: action.response.data
-      fetching: false
-      error: null
+    return {
+        state...,
+        data: action.response.data,
+        error: null,
+        fetching: false,
+    }
 
   reduceFail: (state, action) ->
-    return
-      error: action.error
-      fetching: false
+    return {
+        state...,
+        error: action.error
+        fetching: false
+    }
 
   # Make a request with axios (global or configured instance)
   request: (config) =>
@@ -166,7 +166,7 @@ class AxiosRESTReducer extends AxiosReducer
       delete state.byId[singleId]
       state.data = (id for id in state.data when id != singleId)
 
-    return fetching: false, error: null
+    return {state..., fetching: false, error: null}
 
   transformConfig: (config) ->
     config = super(config)
