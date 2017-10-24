@@ -15,12 +15,13 @@ class AxiosReducer
     @defaults.axios   ?= Axios
     @defaults.baseURL ?= "/#{@defaults.name}"
     @defaults.name    ?= 'noname'
+    @defaults.prefix  ?= 'API'
 
     name = @defaults.name.toUpperCase()
     @TYPES = {
-      FETCHING: "ASYNC/#{name}/FETCHING"
-      FETCH_FAIL: "ASYNC/#{name}/FETCH_FAIL"
-      FETCH_SUCCESS: "ASYNC/#{name}/FETCH_SUCCESS"
+      FETCHING: "#{@defaults.prefix}/#{name}/FETCHING"
+      FETCH_FAIL: "#{@defaults.prefix}/#{name}/FETCH_FAIL"
+      FETCH_SUCCESS: "#{@defaults.prefix}/#{name}/FETCH_SUCCESS"
     }
 
   # Init reducer
