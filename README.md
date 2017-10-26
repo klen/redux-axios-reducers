@@ -1,6 +1,8 @@
 # redux-axios-reducers
 
 [![npm version](https://badge.fury.io/js/redux-axios-reducers.svg)](https://badge.fury.io/js/redux-axios-reducers)
+[![travis build](https://travis-ci.org/klen/redux-axios-reducers.svg?branch=develop)](https://travis-ci.org/klen/redux-axios-reducers)
+
 
 Redux reducers for fetching data with axios HTTP client
 
