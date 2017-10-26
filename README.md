@@ -31,7 +31,10 @@ const client = axios.create({
 });
 
 const reducers = combineReducers({
+
+    // You must to call reducer.configure method for provide reduce function into Redux
     users: usersReducer.configure({axios: client});
+
     // application reducers
     ...
 });
