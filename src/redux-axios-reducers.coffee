@@ -105,7 +105,7 @@ class AxiosReducer
             error: if Axios.isCancel(error) then null else error
             type: @TYPES.FETCH_FAIL
 
-        return error
+        throw error
 
     promise.cancel = cancel
     return promise
