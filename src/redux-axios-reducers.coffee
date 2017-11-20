@@ -17,12 +17,13 @@ class AxiosReducer
     @defaults.name    ?= 'noname'
     @defaults.prefix  ?= 'API'
 
+    @actions = {@fetch, @update, @get, @post, @put, @patch, @remove}
+
     name = @defaults.name.toUpperCase()
-    @TYPES = {
+    @TYPES =
       FETCHING: "#{@defaults.prefix}/#{name}/FETCHING"
       FETCH_FAIL: "#{@defaults.prefix}/#{name}/FETCH_FAIL"
       FETCH_SUCCESS: "#{@defaults.prefix}/#{name}/FETCH_SUCCESS"
-    }
 
   # Init reducer
   configure: (defaults) ->

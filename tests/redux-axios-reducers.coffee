@@ -22,9 +22,18 @@ exports.AxiosReduxReducers =
         test.done()
 
     'Axios Reducer base tests': (test) ->
-        reducer = new Module.AxiosReducer(name: 'resource')
+        class Reducer extends Module.AxiosReducer
+            default:
+                data: null
+                error: null
+                fetching: null
+                custom: true
+
+        reducer = new Reducer name: 'resource'
+
         test.ok(reducer, "Reducer initialized")
         test.ok(reducer.defaults, "Reducer's defaults initialized")
+        test.ok(reducer.actions, "Reducer's actions initialized")
         test.equal(reducer.defaults.name, 'resource')
         test.equal(reducer.defaults.baseURL, '/resource')
         test.equal(reducer.TYPES.FETCHING, 'API/RESOURCE/FETCHING')
@@ -34,6 +43,7 @@ exports.AxiosReduxReducers =
 
         # Initialize State
         state = reduce(undefined, '-')
+        test.ok(state.custom)
 
         # Mock axios
         moxios.stubRequest('/resource',
@@ -74,7 +84,7 @@ exports.AxiosReduxReducers =
             status: 200, responseText: '[{"id": 1}]')
 
         store = @mockStore()
-        store.dispatch reducer.fetch()
+        store.dispatch reducer.actions.fetch()
 
         store.clearActions()
 
