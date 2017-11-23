@@ -38,6 +38,10 @@ exports.AxiosReduxReducers =
         test.equal(reducer.defaults.baseURL, '/resource')
         test.equal(reducer.TYPES.FETCHING, 'API/RESOURCE/FETCHING')
 
+        # Add custom reducer
+        reducer.modifyReducer('test', (state, action) -> {state..., test: 'passed'})
+        test.equal(reducer.TYPES.TEST, "API/RESOURCE/TEST")
+
         # Initialize a reducer
         reduce = reducer.configure()
 
@@ -62,6 +66,11 @@ exports.AxiosReduxReducers =
 
         state = reduce(state, action)
         test.ok(state.fetching)
+
+        action = store.dispatch
+            type: reducer.TYPES.TEST
+        state = reduce(state, action)
+        test.equal(state.test, 'passed')
 
         store.clearActions()
 

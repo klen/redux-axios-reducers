@@ -45,13 +45,15 @@ class AxiosReducer
       return state_ = if reducer then reducer(state, action) else state
 
   modifyReducer: (type, reducer) ->
-    @TYPES["#{@defaults.prefix}/#{@defaults.name.toUpperCase()}/#{type}"] = reducer
+    type = type.toUpperCase()
+    @TYPES[type] = "#{@defaults.prefix}/#{@defaults.name.toUpperCase()}/#{type}"
+    @reducers[@TYPES[type]] = reducer
 
   # Reducers
-  reduceFetching: (state)->
+  reduceFetching: (state) =>
     return {state..., fetching: true}
 
-  reduceSuccess: (state, action) ->
+  reduceSuccess: (state, action) =>
     return {
         state...,
         data: action.response.data,
@@ -59,7 +61,7 @@ class AxiosReducer
         fetching: false,
     }
 
-  reduceFail: (state, action) ->
+  reduceFail: (state, action) =>
     return {
         state...,
         error: action.error
