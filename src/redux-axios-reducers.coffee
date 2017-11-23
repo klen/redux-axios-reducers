@@ -25,6 +25,11 @@ class AxiosReducer
       FETCH_FAIL: "#{@defaults.prefix}/#{name}/FETCH_FAIL"
       FETCH_SUCCESS: "#{@defaults.prefix}/#{name}/FETCH_SUCCESS"
 
+    @reducers =
+      "#{@TYPES.FETCHING}": @reduceFetching
+      "#{@TYPES.FETCH_SUCCESS}": @reduceSuccess
+      "#{@TYPES.FETCH_FAIL}": @reduceFail
+
   # Init reducer
   configure: (defaults) ->
 
@@ -36,15 +41,8 @@ class AxiosReducer
 
     # Create Reducer
     return (state=@default, action) =>
-      return state_ = switch action.type
-
-        when @TYPES.FETCHING then @reduceFetching(state, action)
-
-        when @TYPES.FETCH_SUCCESS then @reduceSuccess(state, action)
-
-        when @TYPES.FETCH_FAIL then @reduceFail(state, action)
-
-        else state
+      reducer = @reducers[action.type]
+      return state_ = if reducer then reducer(state, action) else state
 
   # Reducers
   reduceFetching: (state)->
