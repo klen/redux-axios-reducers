@@ -44,6 +44,9 @@ class AxiosReducer
       reducer = @reducers[action.type]
       return state_ = if reducer then reducer(state, action) else state
 
+  modifyReducer: (type, reducer) ->
+    @TYPES["#{@defaults.prefix}/#{@defaults.name.toUpperCase()}/#{type}"] = reducer
+
   # Reducers
   reduceFetching: (state)->
     return {state..., fetching: true}
