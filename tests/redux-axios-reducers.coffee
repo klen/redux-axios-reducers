@@ -67,6 +67,9 @@ exports.AxiosReduxReducers =
         state = reduce(state, action)
         test.ok(state.fetching)
 
+        state = reduce(state, type: reducer.TYPES.RESET)
+        test.equal(state.fetching, null)
+
         action = store.dispatch
             type: reducer.TYPES.TEST
         state = reduce(state, action)

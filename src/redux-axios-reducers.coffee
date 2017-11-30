@@ -24,11 +24,13 @@ class AxiosReducer
       FETCHING: "#{@defaults.prefix}/#{name}/FETCHING"
       FETCH_FAIL: "#{@defaults.prefix}/#{name}/FETCH_FAIL"
       FETCH_SUCCESS: "#{@defaults.prefix}/#{name}/FETCH_SUCCESS"
+      RESET: "#{@defaults.prefix}/#{name}/RESET"
 
     @reducers =
       "#{@TYPES.FETCHING}": @reduceFetching
       "#{@TYPES.FETCH_SUCCESS}": @reduceSuccess
       "#{@TYPES.FETCH_FAIL}": @reduceFail
+      "#{@TYPES.RESET}": => @default
 
   # Init reducer
   configure: (defaults) ->
