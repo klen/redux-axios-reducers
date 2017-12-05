@@ -25,12 +25,14 @@ class AxiosReducer
       FETCH_FAIL: "#{@defaults.prefix}/#{name}/FETCH_FAIL"
       FETCH_SUCCESS: "#{@defaults.prefix}/#{name}/FETCH_SUCCESS"
       RESET: "#{@defaults.prefix}/#{name}/RESET"
+      UPDATE: "#{@defaults.prefix}/#{name}/UPDATE"
 
     @reducers =
       "#{@TYPES.FETCHING}": @reduceFetching
-      "#{@TYPES.FETCH_SUCCESS}": @reduceSuccess
       "#{@TYPES.FETCH_FAIL}": @reduceFail
+      "#{@TYPES.FETCH_SUCCESS}": @reduceSuccess
       "#{@TYPES.RESET}": => @default
+      "#{@TYPES.UPDATE}": (state, action) -> {state..., action.payload...}
 
   # Init reducer
   configure: (defaults) ->

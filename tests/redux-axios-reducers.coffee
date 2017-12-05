@@ -70,6 +70,9 @@ exports.AxiosReduxReducers =
         state = reduce(state, type: reducer.TYPES.RESET)
         test.equal(state.fetching, null)
 
+        state = reduce(state, type: reducer.TYPES.UPDATE, payload: data: ['test'])
+        test.deepEqual(state.data, ['test'])
+
         action = store.dispatch
             type: reducer.TYPES.TEST
         state = reduce(state, action)
