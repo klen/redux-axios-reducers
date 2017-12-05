@@ -13,9 +13,9 @@ class AxiosReducer
     @default = {@default...}
 
     @defaults.axios   ?= Axios
-    @defaults.baseURL ?= "/#{@defaults.name}"
     @defaults.name    ?= 'noname'
     @defaults.prefix  ?= 'API'
+    @defaults.baseURL ?= "/#{@defaults.name}"
 
     @actions = {@fetch, @update, @get, @post, @put, @patch, @remove}
 
