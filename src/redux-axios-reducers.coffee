@@ -126,9 +126,9 @@ class AxiosReducer
 
   transformData: (data) -> data
 
-  update: (config) =>
-    return @put(config) if config.data and config.data.id or config.id
-    return @post(config)
+  update: (config={}) =>
+    id = config and config.id or config.data and config.data.id
+    return if id then @put(config) else @post(config)
 
   get: (config) => @fetch(config)
 
