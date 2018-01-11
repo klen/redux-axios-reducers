@@ -60,7 +60,7 @@ class AxiosReducer
   reduceSuccess: (state, action) =>
     return {
         state...,
-        data: action.response.data,
+        data: action.payload.response.data,
         error: null,
         fetching: false,
     }
@@ -162,11 +162,11 @@ class AxiosRESTReducer extends AxiosReducer
     @default.data = []
 
   reduceSuccess: (state, action) ->
-    singleId = action.config.id or (
-      action.config.data and action.config.data.id)
+    singleId = action.payload.config.id or (
+      action.payload.config.data and action.payload.config.data.id)
 
-    state.data = [] if action.config.method == 'get' and not singleId
-    data = action.response.data
+    state.data = [] if action.payload.config.method == 'get' and not singleId
+    data = action.payload.response.data
     data = [data] unless Array.isArray(data)
 
     for item in data
@@ -174,7 +174,7 @@ class AxiosRESTReducer extends AxiosReducer
       state.byId[item.id] = item
       state.data.push(item.id) unless singleId
 
-    if action.config.method == 'delete' and singleId
+    if action.payload.config.method == 'delete' and singleId
       delete state.byId[singleId]
       state.data = (id for id in state.data when id != singleId)
 

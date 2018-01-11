@@ -103,10 +103,10 @@ exports.AxiosReduxReducers =
 
         store.clearActions()
 
-        reducer.update() (action) -> test.equal(action.config.method, 'post')
-        reducer.update(id: 1) (action) -> test.equal(action.config.method, 'put')
-        reducer.update(data: id: 1) (action) -> test.equal(action.config.method, 'put')
-        reducer.update(id: 1, data: id: 2) (action) -> test.equal(action.config.url, '/resource/1')
+        reducer.update() (action) -> test.equal(action.payload.config.method, 'post')
+        reducer.update(id: 1) (action) -> test.equal(action.payload.config.method, 'put')
+        reducer.update(data: id: 1) (action) -> test.equal(action.payload.config.method, 'put')
+        reducer.update(id: 1, data: id: 2) (action) -> test.equal(action.payload.config.url, '/resource/1')
 
         moxios.wait ->
             action = store.getActions()[0]
