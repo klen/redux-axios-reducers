@@ -91,7 +91,7 @@ class AxiosReducer
       (c) -> cancel = c
     )}
 
-    dispatch type: @TYPES.FETCHING, config: config unless config.ignore
+    dispatch type: @TYPES.FETCHING, payload: config: config unless config.ignore
 
     promise = @request(config)
 
@@ -99,9 +99,10 @@ class AxiosReducer
         response.data = @transformData(response.data)
         unless config.ignore
           dispatch
-            config: config
-            response: response
             type: @TYPES.FETCH_SUCCESS
+            payload:
+                config: config
+                response: response
 
         return response
 
@@ -109,9 +110,9 @@ class AxiosReducer
         console?.error(error)
         unless config.ignore
           dispatch
-            config: config
-            error: if Axios.isCancel(error) then null else error
             type: @TYPES.FETCH_FAIL
+            payload: config: config
+            error: if Axios.isCancel(error) then null else error
 
         throw error
 
