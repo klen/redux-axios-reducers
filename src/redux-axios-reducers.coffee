@@ -2,7 +2,7 @@ Axios = require('axios')
 
 class AxiosReducer
 
-  default:
+  initial:
     data: null
     error: null
     fetching: null
@@ -10,7 +10,7 @@ class AxiosReducer
   # Construct types and defaults
   constructor: (@defaults={}) ->
 
-    @default = {@default...}
+    @initial = {@initial...}
 
     @defaults.axios   ?= Axios
     @defaults.name    ?= 'noname'
@@ -31,7 +31,7 @@ class AxiosReducer
       "#{@TYPES.FETCHING}": @reduceFetching
       "#{@TYPES.FETCH_FAIL}": @reduceFail
       "#{@TYPES.FETCH_SUCCESS}": @reduceSuccess
-      "#{@TYPES.RESET}": => @default
+      "#{@TYPES.RESET}": => @initial
       "#{@TYPES.UPDATE}": (state, action) -> {state..., action.payload...}
 
   # Init reducer
@@ -44,7 +44,7 @@ class AxiosReducer
     @defaults = {@defaults..., defaults...} if defaults
 
     # Create Reducer
-    return (state=@default, action) =>
+    return (state=@initial, action) =>
       reducer = @reducers[action.type]
       return state_ = if reducer then reducer(state, action) else state
 
@@ -158,8 +158,8 @@ class AxiosRESTReducer extends AxiosReducer
   constructor: (defaults) ->
     super(defaults)
 
-    @default.byId = {}
-    @default.data = []
+    @initial.byId = {}
+    @initial.data = []
 
   reduceSuccess: (state, action) ->
     singleId = action.payload.config.id or (

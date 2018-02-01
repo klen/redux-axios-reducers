@@ -23,7 +23,7 @@ exports.AxiosReduxReducers =
 
     'Axios Reducer base tests': (test) ->
         class Reducer extends Module.AxiosReducer
-            default:
+            initial:
                 data: null
                 error: null
                 fetching: null
