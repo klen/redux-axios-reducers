@@ -171,11 +171,12 @@ class AxiosRESTReducer extends AxiosReducer
 
     for item in data
       continue unless item and item.id
-      state.byId[item.id] = item
-      state.data.push(item.id) unless singleId
+      state.byId = { state.byId..., [item.id]: item }
+      state.data = [state.data..., item.id] unless singleId
 
     if action.payload.config.method == 'delete' and singleId
       delete state.byId[singleId]
+      state.byId = {state.byId...}
       state.data = (id for id in state.data when id != singleId)
 
     return {state..., fetching: false, error: null}
