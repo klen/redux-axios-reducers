@@ -127,8 +127,10 @@ class AxiosReducer
 
   transformData: (data) -> data
 
+  getItemId: (item) -> item.id
+
   update: (config={}) =>
-    id = config and config.id or config.data and config.data.id
+    id = config and @getItemId(config) or config.data and @getItemId(config.data)
     return if id then @put(config) else @post(config)
 
   get: (config) => @fetch(config)
@@ -161,20 +163,21 @@ class AxiosRESTReducer extends AxiosReducer
     @initial.byId = {}
     @initial.data = []
 
-  reduceSuccess: (state, action) ->
-    singleId = action.payload.config.id or (
-      action.payload.config.data and action.payload.config.data.id)
+  reduceSuccess: (state, {payload}) ->
+    singleId = @getItemId(payload.config) or (
+      payload.config.data and @getItemId(payload.config.data))
 
-    state.data = [] if action.payload.config.method == 'get' and not singleId
-    data = action.payload.response.data
+    state.data = [] if payload.config.method == 'get' and not singleId
+    data = payload.response.data
     data = [data] unless Array.isArray(data)
 
     for item in data
-      continue unless item and item.id
-      state.byId = { state.byId..., [item.id]: item }
-      state.data = [state.data..., item.id] unless singleId
+      continue unless item and @getItemId(item)
+      id = @getItemId(item)
+      state.byId = { state.byId..., [id]: item }
+      state.data = [state.data..., id] unless singleId
 
-    if action.payload.config.method == 'delete' and singleId
+    if payload.config.method == 'delete' and singleId
       delete state.byId[singleId]
       state.byId = {state.byId...}
       state.data = (id for id in state.data when id != singleId)
@@ -184,8 +187,10 @@ class AxiosRESTReducer extends AxiosReducer
   transformConfig: (config) ->
     config = super(config)
     id = (
-      config.id or (config.data and config.data.id) or
-      (config.params and config.params.id))
+      @getItemId(config) or
+      (config.data and @getItemId(config.data)) or
+      (config.params and @getItemId(config.params))
+    )
     config.url += "/#{id}" if id
     return config
 
